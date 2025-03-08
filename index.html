@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RWA4 - Blockchain & AI Technology Solutions</title>
+    <style>
+        /* 语言切换开关样式 */
+        .language-switch {
+            position: fixed;
+            top: 10px;
+            right: 20px;
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            background: rgba(255,255,255,0.8);
+            padding: 5px 10px;
+            border-radius: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+            margin: 0 10px;
+        }
+        
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+        }
+        
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+        }
+        
+        input:checked + .slider {
+            background-color: var(--primary);
+        }
+        
+        input:focus + .slider {
+            box-shadow: 0 0 1px var(--primary);
+        }
+        
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+        
+        .slider.round {
+            border-radius: 34px;
+        }
+        
+        .slider.round:before {
+            border-radius: 50%;
+        }
+        
+        .lang-en {
+            display: none;
+        }
+        
+        :root {
+            --primary: #3a86ff;
+            --secondary: #8338ec;
+            --accent: #ff006e;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gradient: linear-gradient(135deg, var(--primary), var(--secondary));
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        header {
+            background: var(--gradient);
+            color: white;
+            padding: 1.5rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: white;
+            text-decoration: none;
+        }
+        
+        .logo span {
+            color: var(--accent);
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 2rem;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: var(--accent);
+        }
+        
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            background: url('https://source.unsplash.com/random/1200x600/?blockchain,digital,finance') center/cover;
+    background-attachment: fixed;
+            position: relative;
+            margin-top: 80px;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            color: white;
+            max-width: 650px;
+        }
+        
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 2rem;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        
+        section {
+            padding: 6rem 0;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+        
+        .section-title h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+        
+        .section-title p {
+            font-size: 1.1rem;
+            color: #6c757d;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .services {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .service-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+        
+        .service-img {
+            height: 200px;
+            background: #f1f1f1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .service-img img {
+            max-width: 60%;
+        }
+        
+        .service-content {
+            padding: 2rem;
+        }
+        
+        .service-content h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--dark);
+        }
+        
+        .service-content p {
+            color: #6c757d;
+            margin-bottom: 1.5rem;
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+        
+        .feature {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            text-align: center;
+        }
+        
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+        }
+        
+        .feature-icon i {
+            color: white;
+            font-size: 2rem;
+        }
+        
+        .feature h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: var(--dark);
+        }
+        
+        .feature p {
+            color: #6c757d;
+        }
+        
+        .about {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+        
+        .about-img {
+            position: relative;
+        }
+        
+        .about-img img {
+            width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+        
+        .about-content h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+        }
+        
+        .about-content p {
+            margin-bottom: 1.5rem;
+            color: #6c757d;
+        }
+        
+        .cta {
+            background: var(--gradient);
+            color: white;
+            text-align: center;
+        }
+        
+        .cta h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .cta p {
+            max-width: 700px;
+            margin: 0 auto 2rem;
+            font-size: 1.1rem;
+        }
+        
+        .cta .btn {
+            background: white;
+            color: var(--primary);
+        }
+        
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 4rem 0 2rem;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+        
+        .footer-logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        
+        .footer-logo span {
+            color: var(--accent);
+        }
+        
+        .footer-about p {
+            margin-bottom: 1.5rem;
+            color: #adb5bd;
+        }
+        
+        .footer-links h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .footer-links ul {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 0.8rem;
+        }
+        
+        .footer-links a {
+            color: #adb5bd;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: var(--accent);
+        }
+        
+        .footer-contact p {
+            margin-bottom: 1rem;
+            color: #adb5bd;
+            display: flex;
+            align-items: center;
+        }
+        
+        .footer-contact p i {
+            margin-right: 1rem;
+            color: var(--accent);
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid #495057;
+            color: #adb5bd;
+        }
+        
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .about {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <script>
+        // 图片加载失败时的备份处理
+        function handleImageError(img) {
+            img.onerror = null;
+            // 提取尺寸从alt属性或使用默认值
+            const dimensions = img.alt.match(/\d+x\d+/) ? img.alt.match(/\d+x\d+/)[0].split('x') : [300, 200];
+            img.src = `/api/placeholder/${dimensions[0]}/${dimensions[1]}`;
+        }
+        
+        // 替换所有图片为更相关的图片
+        document.addEventListener('DOMContentLoaded', function() {
+            // 图标替换为Font Awesome或类似的图标
+            document.querySelectorAll('.feature-icon i').forEach((icon, index) => {
+                const iconClasses = ['🔒', '⚡', '🤖', '📊'];
+                icon.textContent = iconClasses[index] || '✨';
+            });
+        });
+        
+        // 检测浏览器语言并设置网站语言
+        document.addEventListener('DOMContentLoaded', function() {
+            const userLang = navigator.language || navigator.userLanguage;
+            const isChineseUser = userLang.toLowerCase().includes('zh');
+            
+            // 获取所有需要翻译的元素
+            const elements = document.querySelectorAll('[data-lang-en]');
+            
+            // 根据用户语言设置正确的文本
+            elements.forEach(element => {
+                if (!isChineseUser) {
+                    element.textContent = element.getAttribute('data-lang-en');
+                }
+            });
+            
+            // 设置语言切换按钮的状态
+            document.getElementById('lang-toggle').checked = !isChineseUser;
+            
+            // 显示正确的语言内容
+            toggleLanguageContent(!isChineseUser);
+        });
+        
+        // 切换语言函数
+        function toggleLanguage() {
+            const isEnglish = document.getElementById('lang-toggle').checked;
+            
+            // 切换所有带有翻译属性的元素
+            const elements = document.querySelectorAll('[data-lang-en]');
+            elements.forEach(element => {
+                if (isEnglish) {
+                    element.textContent = element.getAttribute('data-lang-en');
+                } else {
+                    element.textContent = element.getAttribute('data-lang-zh');
+                }
+            });
+            
+            // 显示正确的语言内容
+            toggleLanguageContent(isEnglish);
+        }
+        
+        // 切换不同语言的内容块
+        function toggleLanguageContent(isEnglish) {
+            document.querySelectorAll('.lang-zh').forEach(el => {
+                el.style.display = isEnglish ? 'none' : 'block';
+            });
+            
+            document.querySelectorAll('.lang-en').forEach(el => {
+                el.style.display = isEnglish ? 'block' : 'none';
+            });
+        }
+    </script>
+    
+    <!-- 语言切换开关 -->
+    <div class="language-switch">
+        <span>中文</span>
+        <label class="switch">
+            <input type="checkbox" id="lang-toggle" onchange="toggleLanguage()">
+            <span class="slider round"></span>
+        </label>
+        <span>English</span>
+    </div>
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <a href="#" class="logo">RWA<span>4</span></a>
+                <ul class="nav-links">
+                    <li><a href="#home" data-lang-zh="首页" data-lang-en="Home">首页</a></li>
+                    <li><a href="#services" data-lang-zh="服务" data-lang-en="Services">服务</a></li>
+                    <li><a href="#about" data-lang-zh="关于我们" data-lang-en="About Us">关于我们</a></li>
+                    <li><a href="#features" data-lang-zh="技术优势" data-lang-en="Our Technology">技术优势</a></li>
+                    <li><a href="#contact" data-lang-zh="联系我们" data-lang-en="Contact Us">联系我们</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero" id="home">
+        <div class="container">
+            <div class="hero-content">
+                <!-- 中文内容 -->
+                <div class="lang-zh">
+                    <h1>区块链与AI技术的融合创新</h1>
+                    <p>RWA4致力于提供先进的加密货币交易所和实物资产代币化解决方案，将尖端AI技术与区块链无缝集成，为您的数字资产管理提供全新体验。</p>
+                    <a href="#services" class="btn">探索服务</a>
+                </div>
+                
+                <!-- 英文内容 -->
+                <div class="lang-en">
+                    <h1>Innovative Fusion of Blockchain & AI Technology</h1>
+                    <p>RWA4 is committed to providing advanced cryptocurrency exchange and real-world asset tokenization solutions, seamlessly integrating cutting-edge AI technology with blockchain to offer a new experience for your digital asset management.</p>
+                    <a href="#services" class="btn">Explore Services</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="services">
+        <div class="container">
+            <div class="section-title">
+                <!-- 中文内容 -->
+                <div class="lang-zh">
+                    <h2>我们的服务</h2>
+                    <p>RWA4提供全方位的区块链和AI技术解决方案，满足您的数字资产和实物资产代币化需求。</p>
+                </div>
+                
+                <!-- 英文内容 -->
+                <div class="lang-en">
+                    <h2>Our Services</h2>
+                    <p>RWA4 provides comprehensive blockchain and AI technology solutions to meet your digital asset and real-world asset tokenization needs.</p>
+                </div>
+            </div>
+            <div class="services">
+                <div class="service-card">
+                    <div class="service-img">
+                        <img src="https://source.unsplash.com/random/300x200/?cryptocurrency,trading,exchange" alt="加密货币交易所解决方案" onerror="this.src='/api/placeholder/300/200'; this.onerror=null;">
+                    </div>
+                    <div class="service-content">
+                        <!-- 中文内容 -->
+                        <div class="lang-zh">
+                            <h3>加密货币交易所解决方案</h3>
+                            <p>我们提供完整的加密货币交易所搭建服务，包括订单匹配引擎、钱包集成、KYC/AML合规系统以及高级交易界面，支持现货、期货和保证金交易。</p>
+                            <a href="#" class="btn">了解更多</a>
+                        </div>
+                        
+                        <!-- 英文内容 -->
+                        <div class="lang-en">
+                            <h3>Cryptocurrency Exchange Solutions</h3>
+                            <p>We provide complete cryptocurrency exchange setup services, including order matching engines, wallet integration, KYC/AML compliance systems, and advanced trading interfaces, supporting spot, futures, and margin trading.</p>
+                            <a href="#" class="btn">Learn More</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="service-card">
+                    <div class="service-img">
+                        <img src="https://source.unsplash.com/random/300x200/?realestate,asset,blockchain" alt="实物资产代币化(RWA)平台" onerror="this.src='/api/placeholder/300/200'; this.onerror=null;">
+                    </div>
+                    <div class="service-content">
+                        <!-- 中文内容 -->
+                        <div class="lang-zh">
+                            <h3>实物资产代币化(RWA)平台</h3>
+                            <p>将实物资产转化为区块链上的数字代币，实现房地产、艺术品、大宗商品等传统资产的碎片化投资、流动性提升和全球交易。</p>
+                            <a href="#" class="btn">了解更多</a>
+                        </div>
+                        
+                        <!-- 英文内容 -->
+                        <div class="lang-en">
+                            <h3>Real-World Asset (RWA) Tokenization Platform</h3>
+                            <p>Convert physical assets into digital tokens on the blockchain, enabling fractional investment, enhanced liquidity, and global trading of traditional assets such as real estate, art, and commodities.</p>
+                            <a href="#" class="btn">Learn More</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="service-card">
+                    <div class="service-img">
+                        <img src="https://source.unsplash.com/random/300x200/?ai,analytics,data" alt="AI驱动的交易分析" onerror="this.src='/api/placeholder/300/200'; this.onerror=null;">
+                    </div>
+                    <div class="service-content">
+                        <!-- 中文内容 -->
+                        <div class="lang-zh">
+                            <h3>AI驱动的交易分析</h3>
+                            <p>利用先进的人工智能算法，提供市场趋势分析、风险评估、交易策略优化和异常交易监测，帮助您做出更明智的投资决策。</p>
+                            <a href="#" class="btn">了解更多</a>
+                        </div>
+                        
+                        <!-- 英文内容 -->
+                        <div class="lang-en">
+                            <h3>AI-Driven Trading Analytics</h3>
+                            <p>Utilizing advanced artificial intelligence algorithms to provide market trend analysis, risk assessment, trading strategy optimization, and abnormal transaction monitoring, helping you make more informed investment decisions.</p>
+                            <a href="#" class="btn">Learn More</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="features" style="background-color: #f8f9fa;">
+        <div class="container">
+            <div class="section-title">
+                <h2>技术优势</h2>
+                <p>我们结合前沿的区块链和AI技术，为您提供安全、高效、智能的数字资产解决方案。</p>
+            </div>
+            <div class="features">
+                <div class="feature">
+                    <div class="feature-icon">
+                        <i>🔒</i>
+                    </div>
+                    <h3>高级安全架构</h3>
+                    <p>多重签名、冷热钱包隔离、多因素认证和实时监控系统，确保您的数字资产安全。</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">
+                        <i>⚡</i>
+                    </div>
+                    <h3>高性能交易引擎</h3>
+                    <p>每秒处理百万级订单量，毫秒级延迟，满足高频交易需求，提供流畅的交易体验。</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">
+                        <i>🤖</i>
+                    </div>
+                    <h3>智能合约自动化</h3>
+                    <p>自动执行交易、分红、投票等操作，降低运营成本，提高效率，减少人为错误。</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">
+                        <i>📊</i>
+                    </div>
+                    <h3>AI预测分析</h3>
+                    <p>基于深度学习的价格预测模型，识别市场趋势和投资机会，辅助交易决策。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="about">
+        <div class="container">
+            <div class="about">
+                <div class="about-img">
+                    <img src="https://source.unsplash.com/random/600x400/?blockchain,technology,team" alt="关于RWA4" onerror="this.src='/api/placeholder/600/400'; this.onerror=null;">
+                </div>
+                <div class="about-content">
+                    <h2>关于RWA4</h2>
+                    <p>RWA4是一家专注于区块链和AI技术融合的创新企业，由一群拥有丰富金融科技和区块链开发经验的专业人士创立。我们的使命是通过技术创新，连接传统金融与数字经济，让资产管理更加透明、高效、普惠。</p>
+                    <p>我们的团队在区块链开发、人工智能、金融交易系统和数据安全方面拥有深厚的专业知识和丰富的实践经验，为全球客户提供定制化的区块链解决方案，满足不同行业和应用场景的需求。</p>
+                    <a href="#" class="btn">了解更多</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta">
+        <div class="container">
+            <h2>准备好开启您的区块链之旅了吗？</h2>
+            <p>无论您是想建立自己的加密货币交易所，还是将实物资产代币化，RWA4.WORLD都能为您提供全方位的技术支持和解决方案。</p>
+            <a href="#contact" class="btn">立即咨询</a>
+        </div>
+    </section>
+
+    <footer id="contact">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-about">
+                    <div class="footer-logo">RWA4<span>.WORLD</span></div>
+                    <p>我们致力于通过区块链和AI技术的融合创新，为客户提供安全、高效、智能的数字资产解决方案。</p>
+                </div>
+                <div class="footer-links">
+                    <h3>快速导航</h3>
+                    <ul>
+                        <li><a href="#home">首页</a></li>
+                        <li><a href="#services">服务</a></li>
+                        <li><a href="#about">关于我们</a></li>
+                        <li><a href="#features">技术优势</a></li>
+                        <li><a href="#contact">联系我们</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h3>我们的服务</h3>
+                    <ul>
+                        <li><a href="#">加密货币交易所</a></li>
+                        <li><a href="#">实物资产代币化</a></li>
+                        <li><a href="#">AI驱动的交易分析</a></li>
+                        <li><a href="#">区块链咨询</a></li>
+                        <li><a href="#">技术支持</a></li>
+                    </ul>
+                </div>
+                <div class="footer-contact">
+                    <h3>联系我们</h3>
+                    <p><i>📧</i> info@rwa4.com</p>
+                    <p><i>📱</i> +1 (888) 888-8888</p>
+                    <p><i>🌍</i> 全球服务，多语言支持</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 RWA4. 版权所有。</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
